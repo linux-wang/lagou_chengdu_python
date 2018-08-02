@@ -48,3 +48,16 @@ company = [re.sub(r'\s', '',cy) for cy in company.split('\n') if cy]
 print(company[0], company[2], company[4], company[6])
 # company = re.sub(r'\s', ' ', company)
 # print(company)
+
+
+with open('./job_list.html', 'r') as f:
+    c = f.read()
+
+soup_c = BeautifulSoup(content, 'lxml')
+job_links = soup_c.find_all('a', class_='position_link')
+job_links = [jl.get('href') for jl in job_links]
+
+
+start_url = 'https://www.lagou.com/zhaopin/Python/?filterOption=3'
+start_url = 'https://www.lagou.com/zhaopin/Python/'
+next_url = 'https://www.lagou.com/zhaopin/Python/2/'
