@@ -4,18 +4,25 @@ import re
 import json
 from requests_html import HTMLSession
 import time
+from selenium import webdriver
+
+
+cookie = get_cookie('https://www.lagou.com/jobs/list_Python?px=default&city=%E6%88%90%E9%83%BD#filterBox')
 
 # get html source code
 def get_html(url):
     # session = HTMLSession()
     # r = session.get(url)    
     # return r.text
-
-    from selenium import webdriver
     driver = webdriver.chrome.webdriver.WebDriver()
-    driver.implicitly_wait(10)
-    driver.get(url)
+    driver.get(url)    
+    driver.delete_all_cookies()
 
+    driver.implicitly_wait(10)
+
+    # driver.find_element_by_class_name('pager_next').get_attribute('class')
+    # pager_next pager_next_disabled
+    time.sleep(10)
     return driver.page_source.encode('utf-8')
 
 
@@ -53,6 +60,7 @@ def get_job_list(url):
 
 def get_job_info(url):
     content = get_html(url)
+    # print(content)
     soup = BeautifulSoup(content, 'lxml')
 
     title = soup.title.text
@@ -103,16 +111,16 @@ def get_job_info(url):
 
 
 def main():
-    start_url = 'https://www.lagou.com/jobs/list_Python?px=default&city=%E6%88%90%E9%83%BD#filterBox'
-    # page_links = get_page_link(start_url)
+    start_url = 'https://www.lagou.com/zhaopin/Python/'
+    page_links = get_page_link(start_url)
     # print(page_links)
 
     job_links = set()
 
     jbl = get_job_list(start_url)
-    # for pl in page_links:
-        # job_links.update(pl)
-    job_links.update(jbl)
+    for pl in page_links:
+        job_links.update(pl)
+    # job_links.update(jbl)
     # print(job_links)
 
     for jl in job_links:
