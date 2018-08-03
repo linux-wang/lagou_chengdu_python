@@ -23,7 +23,7 @@ def get_job_list(content):
     job_links = soup_c.find_all('a', class_='position_link')
     job_links = [jl.get('href') for jl in job_links]
     for jl in job_links:
-        info_logger.info(time.ctime() + '\t' + 'get job_link: ' + jl)
+        info_logger.info('get job_link: ' + jl)
 
     return job_links
 
@@ -111,9 +111,10 @@ def work(start_url):
             job_info, com_info = get_job_info(job_content)
             with open('result.txt', 'a') as f:
                 f.write(json.dumps(job_info) + '    ' + json.dumps(com_info) + '\n')
-            info_logger.info(time.ctime + '\t' + jl)
+            info_logger.info('get job_info: ' + jl)
+            print(job_info)
         except:
-            error_logger.error(time.ctime() + '\t' + jl) 
+            error_logger.error('get_job_info error: ' +jl) 
 
         time.sleep(random.randint(5, 10))
 
