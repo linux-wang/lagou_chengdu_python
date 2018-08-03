@@ -103,11 +103,9 @@ def work(start_url):
         job_links.update(job_link)
 
         is_last = driver.find_element_by_class_name('pager_next').get_attribute('class')
-        print(is_last)
         time.sleep(random.randint(4, 10))
 
     for jl in job_links:
-        print(jl)
         driver.get(jl)
         job_content = driver.page_source.encode('utf-8')
         driver.implicitly_wait(10)
