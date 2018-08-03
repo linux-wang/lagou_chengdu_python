@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-from bs4 import BeautifulSoup
-import re
 import json
-import time
-from selenium import webdriver
-import random
 import logging
 import logging.config
+import random
+import re
+import time
 
+from bs4 import BeautifulSoup
+from selenium import webdriver
 
 # logger
 logging.config.fileConfig('./log.conf')
@@ -119,9 +119,6 @@ def work(start_url):
         time.sleep(random.randint(5, 10))
 
 
-def main():
+if __name__ == '__main__':
     start_url = 'https://www.lagou.com/jobs/list_Python?px=default&city=%E6%88%90%E9%83%BD#filterBox'
     work(start_url)
-
-if __name__ == '__main__':
-    main()
