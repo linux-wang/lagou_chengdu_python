@@ -5,6 +5,16 @@ import json
 import time
 from selenium import webdriver
 import random
+import logging
+import logging.config
+
+
+# logger
+logging.config.fileConfig('./log.conf')
+info_logger = logging.getLogger('info')
+error_logger = logging.getLogger('error')
+warn_logger = logging.getLogger('root')
+
 
 # get job_links
 def get_job_list(content):
@@ -12,6 +22,8 @@ def get_job_list(content):
 
     job_links = soup_c.find_all('a', class_='position_link')
     job_links = [jl.get('href') for jl in job_links]
+    for jl in job_links:
+        info_logger.info(time.ctime() + '\t' + 'get job_link: ' + jl)
 
     return job_links
 
@@ -99,9 +111,9 @@ def work(start_url):
             job_info, com_info = get_job_info(job_content)
             with open('result.txt', 'a') as f:
                 f.write(json.dumps(job_info) + '    ' + json.dumps(com_info) + '\n')
+            info_logger.info(time.ctime + '\t' + jl)
         except:
-            with open('.log/error.log', 'a') as f:
-                f.write(jl + '  ' + driver.current_url + '\n')
+            error_logger.error(time.ctime() + '\t' + jl) 
 
         time.sleep(random.randint(5, 10))
 
