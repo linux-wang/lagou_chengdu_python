@@ -2,25 +2,9 @@
 from bs4 import BeautifulSoup
 import re
 import json
-from requests_html import HTMLSession
 import time
 from selenium import webdriver
 import random
-
-
-# get html source code
-def get_html(url):
-    # session = HTMLSession()
-    # r = session.get(url)    
-    # return r.text
-    driver = webdriver.chrome.webdriver.WebDriver()
-    driver.get(url)    
-
-    driver.implicitly_wait(10)
-    time.sleep(random.randint(4, 10))
-
-    return driver.page_source.encode('utf-8')
-
 
 # get job_links
 def get_job_list(content):
@@ -103,18 +87,23 @@ def work(start_url):
         job_links.update(job_link)
 
         is_last = driver.find_element_by_class_name('pager_next').get_attribute('class')
-        time.sleep(random.randint(4, 10))
+        time.sleep(random.randint(5, 10))
 
+    print(len(job_links))
     for jl in job_links:
+        print(jl)
         driver.get(jl)
         job_content = driver.page_source.encode('utf-8')
         driver.implicitly_wait(10)
+        try:
+            job_info, com_info = get_job_info(job_content)
+            with open('result.txt', 'a') as f:
+                f.write(json.dumps(job_info) + '    ' + json.dumps(com_info) + '\n')
+        except:
+            with open('.log/error.log', 'a') as f:
+                f.write(jl + '  ' + driver.current_url + '\n')
 
-        job_info, com_info = get_job_info(job_content)
-        with open('result.txt', 'a') as f:
-            f.write(json.dumps(job_info) + '    ' + json.dumps(com_info) + '\n')
-
-        time.sleep(random.randint(4, 10))
+        time.sleep(random.randint(5, 10))
 
 
 def main():
