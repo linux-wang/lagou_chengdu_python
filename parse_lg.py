@@ -106,17 +106,17 @@ def work(start_url):
         print(is_last)
         time.sleep(random.randint(4, 10))
 
-    # for jl in job_links:
-    #     print(jl)
-    #     driver.get(jl)
-    #     job_content = driver.page_source.encode('utf-8')
-    #     driver.implicitly_wait(10)
+    for jl in job_links:
+        print(jl)
+        driver.get(jl)
+        job_content = driver.page_source.encode('utf-8')
+        driver.implicitly_wait(10)
 
-    #     job_info, com_info = get_job_info(job_content)
-    #     with open('result.txt', 'a') as f:
-    #         f.write(json.dumps(job_info) + '    ' + json.dumps(com_info) + '\n')
+        job_info, com_info = get_job_info(job_content)
+        with open('result.txt', 'a') as f:
+            f.write(json.dumps(job_info) + '    ' + json.dumps(com_info) + '\n')
 
-    #     time.sleep(random.randint(4, 10))
+        time.sleep(random.randint(4, 10))
 
 
 def main():
