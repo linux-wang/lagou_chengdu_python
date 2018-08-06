@@ -100,4 +100,6 @@ def insert(session, job_info, company_info):
     session.commit()
 
 
-session = get_session('lagou', 'lagou_passwd', 'localhost', '3306', 'lagou')
+def save_to_db(job_info, company_info):
+    session = get_session('lagou', 'lagou_passwd', 'localhost', '3306', 'lagou')
+    insert(session, job_info, company_info)
