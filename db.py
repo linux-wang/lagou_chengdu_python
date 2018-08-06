@@ -8,6 +8,24 @@ from sqlalchemy.orm import sessionmaker
 Base = declarative_base()
 
 
+def get_engine(user, passwd, host, port, db):
+    # 'mysql://lagou:lagou_passwd@localhost:3306/lagou'
+    url = 'mysql://{user}:{passwd}@{host}:{port}/{db}'.format(user=user, passwd=passwd, host=host, port=port, db=db)
+    engine = create_engine(url, echo=True)
+    return engine
+
+
+def get_session(engine):
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
+    return session
+
+
+engine = get_engine('lagou', 'lagou_passwd', 'localhost', '3306', 'lagou')
+session = get_session(engine)
+
+
 class Job(Base):
     __tablename__ = 'job_info'
     job_id = Column(Integer, primary_key=True)
@@ -33,16 +51,7 @@ class Company(Base):
     website = Column(String(128))
 
 
-def get_session(user, passwd, host, port, db):
-    # 'mysql://lagou:lagou_passwd@localhost:3306/lagou'
-    url = 'mysql://{user}:{passwd}@{host}:{port}/{db}'.format(user=user, passwd=passwd, host=host, port=port, db=db)
-    engine = create_engine(url, echo=True)
-
-    Session = sessionmaker()
-    Session.configure(bind=engine)
-    session = Session()
-
-    return session
+Base.metadata.create_all(engine)
 
 
 def insert(session, job_info, company_info):
@@ -73,10 +82,6 @@ def insert(session, job_info, company_info):
         website=company_info['website']
     )
 
-    session.add_all([job, company])
+    session.add(job)
+    session.add(company)
     session.commit()
-
-
-def save_to_db(job_info, company_info):
-    session = get_session('lagou', 'lagou_passwd', 'localhost', '3306', 'lagou')
-    insert(session, job_info, company_info)

@@ -116,7 +116,8 @@ def work(start_url):
 
         try:
             job_info, com_info = get_job_info(job_content, job_id)
-            save_to_db(job_info, com_info)
+
+            insert(session, job_info, com_info)
 
             with open('result.txt', 'a') as f:
                 f.write(json.dumps(job_info) + '    ' + json.dumps(com_info) + '\n')
