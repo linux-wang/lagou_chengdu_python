@@ -54,9 +54,11 @@ def get_job_info(content, job_id):
 
     company = soup.find('ul', class_='c_feature').text
     company = [re.sub(r'\s', '',cy) for cy in company.split('\n') if cy]
+    company_id = review_anchor.split('=')[-1]
 
     job_info = {
         'job_id': job_id,
+        'company_id': company_id,
         'company_name': company_name,
         'position': position,
         'salary': salary,
@@ -68,7 +70,7 @@ def get_job_info(content, job_id):
         'review_anchor': review_anchor
     }
     company_info = {
-        'id': review_anchor.split('=')[-1],
+        'id': company_id,
         'name': job_company,
         'zone': company[0],
         'status': company[2],
