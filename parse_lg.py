@@ -57,8 +57,8 @@ def get_job_info(content, job_id):
     company_id = review_anchor.split('=')[-1]
 
     job_info = {
-        'job_id': job_id,
-        'company_id': company_id,
+        'job_id': int(job_id),
+        'company_id': int(company_id),
         'company_name': company_name,
         'position': position,
         'salary': salary,
@@ -70,7 +70,7 @@ def get_job_info(content, job_id):
         'review_anchor': review_anchor
     }
     company_info = {
-        'id': company_id,
+        'id': int(company_id),
         'name': job_company,
         'zone': company[0],
         'status': company[2],
