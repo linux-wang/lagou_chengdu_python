@@ -28,7 +28,7 @@ def get_job_list(content):
     return job_links
 
 
-def get_job_info(content, company_id):
+def get_job_info(content, job_id):
     soup = BeautifulSoup(content, 'lxml')
 
     title = soup.title.text
@@ -56,7 +56,7 @@ def get_job_info(content, company_id):
     company = [re.sub(r'\s', '',cy) for cy in company.split('\n') if cy]
 
     job_info = {
-        'company_id': company_id,
+        'job_id': job_id,
         'company_name': company_name,
         'position': position,
         'salary': salary,
@@ -108,9 +108,9 @@ def work(start_url):
         driver.get(jl)
         job_content = driver.page_source.encode('utf-8')
         driver.implicitly_wait(10)
-        company_id = jl.split('.')[-2].split('/')[-1]
+        job_id = jl.split('.')[-2].split('/')[-1]
         try:
-            job_info, com_info = get_job_info(job_content, company_id)
+            job_info, com_info = get_job_info(job_content, job_id)
             with open('result.txt', 'a') as f:
                 f.write(json.dumps(job_info) + '    ' + json.dumps(com_info) + '\n')
             info_logger.info('get job_info: ' + jl)
