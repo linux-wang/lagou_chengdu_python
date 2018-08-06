@@ -10,7 +10,7 @@ Base = declarative_base()
 
 class Job(Base):
     __tablename__ = 'job_info'
-    job_id = Column(Integer, primary_key=False)
+    job_id = Column(Integer, primary_key=True)
     company_id = Column(Integer)
     company_name = Column(String(256))
     position = Column(String(128))
@@ -25,7 +25,7 @@ class Job(Base):
 
 class Company(Base):
     __tablename__ = 'company_info'
-    company_id = Column(Integer, primary_key=False)
+    company_id = Column(Integer, primary_key=True)
     company_name = Column(String(256))
     zone = Column(String(256))
     status = Column(String(256))
@@ -74,26 +74,26 @@ def insert(session, job_info, company_info):
         return
 
     job = Job(
-        job_id=job_info('job_id'),
-        company_id=job_info('company_id'),
-        company_name=job_info('company_name'),
-        position=job_info('position'),
-        salary=job_info('salary'),
-        position_label=job_info('position_label'),
-        job_request=job_info('job_request'),
-        job_advantage=job_info('job_advantage'),
-        job_description=job_info('job_description'),
-        work_add=job_info('work_add'),
-        review_anchor=job_info('review_anchor')
+        job_id=job_info['job_id'],
+        company_id=job_info['company_id'],
+        company_name=job_info['company_name'],
+        position=job_info['position'],
+        salary=job_info['salary'],
+        position_label=job_info['position_label'],
+        job_request=job_info['job_request'],
+        job_advantage=job_info['job_advantage'],
+        job_description=job_info['job_description'],
+        work_add=job_info['work_add'],
+        review_anchor=job_info['review_anchor']
     )
 
     company = Company(
-        company_id=company_info('id'),
-        company_name=company_info('name'),
-        zone=company_info('zone'),
-        status=company_info('status'),
-        people_num=company_info('people_num'),
-        website=company_info('website')
+        company_id=company_info['id'],
+        company_name=company_info['name'],
+        zone=company_info['zone'],
+        status=company_info['status'],
+        people_num=company_info['people_num'],
+        website=company_info['website']
     )
 
     session.add_all([job, company])

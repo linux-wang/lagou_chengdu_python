@@ -123,8 +123,8 @@ def work(start_url):
             info_logger.info('get job_info: ' + jl)
 
             print(job_info)
-        except:
-            error_logger.error('get_job_info error: ' +jl) 
+        except Exception as e:
+            error_logger.error('get_job_info error: ' + jl + '  ' + e.args[0])
 
         time.sleep(random.randint(5, 10))
 
