@@ -33,29 +33,6 @@ class Company(Base):
     website = Column(String(128))
 
 
-    # job_info = {
-    #     'job_id': int(job_id),
-    #     'company_id': int(company_id),
-    #     'company_name': company_name,
-    #     'position': position,
-    #     'salary': salary,
-    #     'position_label': position_label,
-    #     'job_request': job_request,
-    #     'job_advantage': job_advantage,
-    #     'job_description': job_description,
-    #     'work_add': work_add,
-    #     'review_anchor': review_anchor
-    # }
-    # company_info = {
-    #     'id': int(company_id),
-    #     'name': job_company,
-    #     'zone': company[0],
-    #     'status': company[2],
-    #     'people_num': company[4],
-    #     'website': company[6]
-    # }
-
-
 def get_session(user, passwd, host, port, db):
     # 'mysql://lagou:lagou_passwd@localhost:3306/lagou'
     url = 'mysql://{user}:{passwd}@{host}:{port}/{db}'.format(user=user, passwd=passwd, host=host, port=port, db=db)
