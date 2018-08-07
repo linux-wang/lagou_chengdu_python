@@ -103,17 +103,17 @@ def work(start_url):
     job_link = get_job_list(content)
     job_links.update(job_link)
 
-    # is_last = driver.find_element_by_class_name('pager_next').get_attribute('class')
-    # while is_last != 'pager_next pager_next_disabled':
-    #     driver.find_element_by_class_name('pager_next').click()
-    #     driver.implicitly_wait(10)
-    #     content = driver.page_source.encode('utf-8')
-    #
-    #     job_link = get_job_list(content)
-    #     job_links.update(job_link)
-    #
-    #     is_last = driver.find_element_by_class_name('pager_next').get_attribute('class')
-    #     time.sleep(random.randint(5, 10))
+    # # test
+    # print(job_links)
+    # jl = job_links.pop()
+    # driver.get(jl)
+    # job_content = driver.page_source.encode('utf-8')
+    # driver.implicitly_wait(10)
+    # job_id = jl.split('.')[-2].split('/')[-1]
+    # job_info, com_info = get_job_info(job_content, job_id)
+    # insert(session, job_info, com_info)
+    # with open('result.txt', 'a') as f:
+    #     f.write(json.dumps(job_info) + '    ' + json.dumps(com_info) + '\n')
 
     print(len(job_links))
     for jl in job_links:

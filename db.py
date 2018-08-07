@@ -31,6 +31,12 @@ class Job(Base):
     salary = Column(String(32))
     position_label = Column(String(256))
     job_request = Column(String(2048))
+
+    city = Column(String(32))
+    work_experience = Column(String(32))
+    education=Column(String(32))
+    full_or_part=Column(String(32))
+
     job_advantage = Column(String(2048))
     job_description = Column(String(2048))
     work_add = Column(String(1024))
@@ -66,7 +72,6 @@ def insert(session, job_info, company_info):
         position=job_info['position'],
         salary=job_info['salary'],
         position_label=job_info['position_label'],
-        job_request=job_info['job_request'],
         city=job_info['city'],
         work_experience=job_info['work_experience'],
         education=job_info['education'],
