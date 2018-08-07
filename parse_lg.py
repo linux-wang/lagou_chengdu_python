@@ -135,6 +135,8 @@ def work(start_url):
             print(job_info)
         except Exception as e:
             error_logger.error('get_job_info error: ' + jl + '  ' + e.args[0])
+            with open('./data/failed_url.txt', 'a') as f:
+                f.write(jl + '\n')
 
         time.sleep(random.randint(5, 10))
 
