@@ -38,7 +38,7 @@ class Job(Base):
     full_or_part=Column(String(32))
 
     job_advantage = Column(String(2048))
-    job_description = Column(String(2048))
+    job_description = Column(String(4096))
     work_add = Column(String(1024))
     review_anchor = Column(String(256))
     day = Column(String(16))
@@ -50,17 +50,17 @@ class Company(Base):
     company_name = Column(String(256))
     zone = Column(String(256))
     status = Column(String(256))
-    people_num = Column(String(128))
+    people_num = Column(String(256))
     website = Column(String(128))
     day = Column(String(16))
 
 
 engine = get_engine('lagou', 'lagou_passwd', 'localhost', '3306', 'lagou')
-session = get_session(engine)
 Base.metadata.create_all(engine)
 
 
-def insert(session, job_info, company_info):
+def insert(engine, job_info, company_info):
+    session = get_session(engine)
 
     if not job_info or not company_info:
         return
@@ -93,6 +93,9 @@ def insert(session, job_info, company_info):
         day=day
     )
 
-    session.add(job)
-    session.add(company)
+    if not session.query(Job).filter_by(job_id=job_info['job_id']).one_or_none():
+        session.add(job)
+    if not session.query(Company).filter_by(company_id=company_info['id']).one_or_none():
+        session.add(company)
+
     session.commit()

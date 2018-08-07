@@ -17,7 +17,7 @@ error_logger = logging.getLogger('error')
 warn_logger = logging.getLogger('root')
 
 
-# get job_links
+# get search result page's job_links
 def get_job_list(content):
     soup_c = BeautifulSoup(content, 'lxml')
 
@@ -29,6 +29,7 @@ def get_job_list(content):
     return job_links
 
 
+# parse html
 def get_job_info(content, job_id):
     soup = BeautifulSoup(content, 'lxml')
 
@@ -91,7 +92,8 @@ def get_job_info(content, job_id):
     return job_info, company_info
 
 
-def work(start_url):
+# get search result pages
+def get_job_links(start_page):
     job_links = set()
 
     driver = webdriver.chrome.webdriver.WebDriver()
@@ -115,23 +117,22 @@ def work(start_url):
         job_links.update(job_link)
 
         is_last = driver.find_element_by_class_name('pager_next').get_attribute('class')
+
         time.sleep(random.randint(5, 10))
 
-    # # test
-    # print(job_links)
-    # jl = job_links.pop()
-    # driver.get(jl)
-    # job_content = driver.page_source.encode('utf-8')
-    # driver.implicitly_wait(10)
-    # job_id = jl.split('.')[-2].split('/')[-1]
-    # job_info, com_info = get_job_info(job_content, job_id)
-    # insert(session, job_info, com_info)
-    # with open('result.txt', 'a') as f:
-    #     f.write(json.dumps(job_info) + '    ' + json.dumps(com_info) + '\n')
+    with open('./data/job_links.txt', 'a') as f:
+        for lk in job_links:
+            f.write(lk + '\n')
 
-    print(len(job_links))
+    return job_links
+
+
+# save job_info and company_info to db
+def get_info(job_links):
+    driver = webdriver.chrome.webdriver.WebDriver()
+
     for jl in job_links:
-        print(jl)
+        print('正在处理：' + jl)
         driver.get(jl)
         job_content = driver.page_source.encode('utf-8')
         driver.implicitly_wait(10)
@@ -140,13 +141,13 @@ def work(start_url):
         try:
             job_info, com_info = get_job_info(job_content, job_id)
 
-            insert(session, job_info, com_info)
+            insert(engine, job_info, com_info)
 
             with open('result.txt', 'a') as f:
                 f.write(json.dumps(job_info) + '    ' + json.dumps(com_info) + '\n')
             info_logger.info('get job_info: ' + jl)
 
-            print(job_info)
+            # print(job_info)
         except Exception as e:
             error_logger.error('get_job_info error: ' + jl + '  ' + e.args[0])
             with open('./data/failed_url.txt', 'a') as f:
@@ -155,6 +156,71 @@ def work(start_url):
         time.sleep(random.randint(5, 10))
 
 
+# def work(start_url):
+#     job_links = set()
+#
+#     driver = webdriver.chrome.webdriver.WebDriver()
+#     driver.get(start_url)
+#     driver.implicitly_wait(10)
+#     content = driver.page_source.encode('utf-8')
+#     time.sleep(random.randint(4, 10))
+#
+#     job_link = get_job_list(content)
+#     job_links.update(job_link)
+#
+#     # driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+#
+#     is_last = driver.find_element_by_class_name('pager_next').get_attribute('class')
+#     while is_last != 'pager_next pager_next_disabled':
+#         driver.find_element_by_class_name('pager_next').click()
+#         driver.implicitly_wait(10)
+#         content = driver.page_source.encode('utf-8')
+#
+#         job_link = get_job_list(content)
+#         job_links.update(job_link)
+#
+#         is_last = driver.find_element_by_class_name('pager_next').get_attribute('class')
+#         time.sleep(random.randint(5, 10))
+#
+#     # # test
+#     # print(job_links)
+#     # jl = job_links.pop()
+#     # driver.get(jl)
+#     # job_content = driver.page_source.encode('utf-8')
+#     # driver.implicitly_wait(10)
+#     # job_id = jl.split('.')[-2].split('/')[-1]
+#     # job_info, com_info = get_job_info(job_content, job_id)
+#     # insert(session, job_info, com_info)
+#     # with open('result.txt', 'a') as f:
+#     #     f.write(json.dumps(job_info) + '    ' + json.dumps(com_info) + '\n')
+#
+#     print(len(job_links))
+#     for jl in job_links:
+#         print(jl)
+#         driver.get(jl)
+#         job_content = driver.page_source.encode('utf-8')
+#         driver.implicitly_wait(10)
+#         job_id = jl.split('.')[-2].split('/')[-1]
+#
+#         try:
+#             job_info, com_info = get_job_info(job_content, job_id)
+#
+#             insert(engine, job_info, com_info)
+#
+#             with open('result.txt', 'a') as f:
+#                 f.write(json.dumps(job_info) + '    ' + json.dumps(com_info) + '\n')
+#             info_logger.info('get job_info: ' + jl)
+#
+#             print(job_info)
+#         except Exception as e:
+#             error_logger.error('get_job_info error: ' + jl + '  ' + e.args[0])
+#             with open('./data/failed_url.txt', 'a') as f:
+#                 f.write(jl + '\n')
+#
+#         time.sleep(random.randint(5, 10))
+
+
 if __name__ == '__main__':
     start_url = 'https://www.lagou.com/jobs/list_Python?px=default&city=%E6%88%90%E9%83%BD#filterBox'
-    work(start_url)
+    job_links = get_job_links(start_url)
+    get_info(job_links)
