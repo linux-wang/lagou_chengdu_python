@@ -1,10 +1,17 @@
 # -*- coding:utf-8 -*-
 
 import time
+import os
+import sys
 
 from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+
+# import conf
+cur_path = os.path.dirname(__file__)
+sys.path.append(os.path.abspath(os.path.join(cur_path, "../conf/settings.py")))
+from settings import *
 
 Base = declarative_base()
 day = time.strftime('%Y%m%d')
@@ -34,8 +41,8 @@ class Job(Base):
 
     city = Column(String(32))
     work_experience = Column(String(32))
-    education=Column(String(32))
-    full_or_part=Column(String(32))
+    education = Column(String(32))
+    full_or_part = Column(String(32))
 
     job_advantage = Column(String(2048))
     job_description = Column(String(4096))
@@ -55,7 +62,7 @@ class Company(Base):
     day = Column(String(16))
 
 
-engine = get_engine('lagou', 'lagou_passwd', 'localhost', '3306', 'lagou')
+engine = get_engine(db_user, db_passwd, db_host, db_port, db_name)
 Base.metadata.create_all(engine)
 
 

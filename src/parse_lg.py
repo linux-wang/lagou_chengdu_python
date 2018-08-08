@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 import json
-import logging
 import logging.config
 import random
 import re
+import os
+import sys
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-from db import *
+from src.db import *
 
 # logger
-logging.config.fileConfig('./log.conf')
+logging.config.fileConfig('../conf/log.conf')
 info_logger = logging.getLogger('info')
 error_logger = logging.getLogger('error')
 warn_logger = logging.getLogger('root')
@@ -120,7 +121,7 @@ def get_job_links(start_page):
 
         time.sleep(random.randint(5, 10))
 
-    with open('./data/job_links.txt', 'a') as f:
+    with open('../data/job_links.txt', 'a') as f:
         for lk in job_links:
             f.write(lk + '\n')
 
@@ -150,7 +151,7 @@ def get_info(job_links):
             # print(job_info)
         except Exception as e:
             error_logger.error('get_job_info error: ' + jl + '  ' + e.args[0])
-            with open('./data/failed_url.txt', 'a') as f:
+            with open('../data/failed_url.txt', 'a') as f:
                 f.write(jl + '\n')
 
         time.sleep(random.randint(5, 10))
