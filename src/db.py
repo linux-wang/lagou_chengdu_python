@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 
 # import conf
 cur_path = os.path.dirname(__file__)
-sys.path.append(os.path.abspath(os.path.join(cur_path, "../conf/settings.py")))
+sys.path.append(os.path.abspath(os.path.join(cur_path, "../conf")))
 from settings import *
 
 Base = declarative_base()

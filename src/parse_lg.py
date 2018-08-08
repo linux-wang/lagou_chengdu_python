@@ -9,7 +9,7 @@ import sys
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-from src.db import *
+from db import *
 
 # logger
 logging.config.fileConfig('../conf/log.conf')
